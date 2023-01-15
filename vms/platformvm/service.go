@@ -1835,6 +1835,9 @@ type APIBlockchain struct {
 
 	// Virtual Machine the blockchain runs
 	VMID ids.ID `json:"vmID"`
+
+	// Byte representation of genesis state
+	GenesisData []byte `json:"genesisData"`
 }
 
 // GetBlockchainsResponse is the response from a call to GetBlockchains
@@ -1871,10 +1874,11 @@ func (s *Service) GetBlockchains(_ *http.Request, _ *struct{}, response *GetBloc
 				return fmt.Errorf("expected tx type *txs.CreateChainTx but got %T", chainTx.Unsigned)
 			}
 			response.Blockchains = append(response.Blockchains, APIBlockchain{
-				ID:       chainID,
-				Name:     chain.ChainName,
-				SubnetID: subnetID,
-				VMID:     chain.VMID,
+				ID:          chainID,
+				Name:        chain.ChainName,
+				SubnetID:    subnetID,
+				VMID:        chain.VMID,
+				GenesisData: chain.GenesisData,
 			})
 		}
 	}
